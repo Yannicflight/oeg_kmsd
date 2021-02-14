@@ -1,0 +1,10 @@
+type: entities
+entities:
+  - entity: sensor.dak_t1
+    icon: 'mdi:home-roof'
+  - entity: sensor.boiler_laag_t2
+    icon: 'mdi:water-boiler'
+  - entity: sensor.boiler_hoog_t3
+    icon: 'mdi:water-boiler'
+  - entity: sensor.oeg_pomp
+    icon: 'mdi:pump'
