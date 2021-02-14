@@ -1,0 +1,22 @@
+sensor:
+
+#MQTT sensors
+  - platform: mqtt
+    name: "Dak T1"
+    state_topic: "home-assistant/oeg/OegT1"
+    unit_of_measurement: "C"
+    
+  - platform: mqtt
+    name: "Boiler laag T2"
+    state_topic: "home-assistant/oeg/OegT2"
+    unit_of_measurement: "C"
+    
+  - platform: mqtt
+    name: "Boiler hoog T3"
+    state_topic: "home-assistant/oeg/OegT3"
+    unit_of_measurement: "C"
+    
+  - platform: mqtt
+    name: "OEG pomp"
+    state_topic: "home-assistant/oeg/Oegpomp"
+    unit_of_measurement: "%"
