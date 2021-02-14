@@ -15,6 +15,7 @@ The python script is tested and working with Home-assistant and the standard Mos
 - Copy the lines of entities.yaml to a new entity card
 
 
+####################################################
 
 Original introduction by ced2git:
 
