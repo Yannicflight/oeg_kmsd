@@ -4,12 +4,13 @@ ced2git, thanks allot for figuring out and publishing the OEG Modbus protocol!
 
 The python script is tested and working with Home-assistant and the standard Mosquitto MQTT broker.
 
+## On the PC or PI connected to KSMd:
 - Make sure to fill in your broker IP-address, username and password.
 - Make sure to fill in the com port or /dev/ttyusb of your KSMd USB connection.
 - Use PIP to install pyserial (NOT SERIAL!):  pip install pyserial
 - Use PIP to install Paho MQTT:               pip install paho-mqtt
 
-## Home assistant
+## Home assistant:
 - Copy and add the lines in the configuration.yaml file below the "sensors" part in your home-assistants configuration.yaml file.
 - Copy the lines of entities.yaml to a new entity card
 
