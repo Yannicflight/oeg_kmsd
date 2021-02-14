@@ -1,58 +1,45 @@
-#!/usr/bin/env python3
-
+#!/usr/bin/python3
+#
 
 oeg_dict = {
 
-	39:"T2_Sensor",
-	40:"T3_Sensor",
-	41:"T4_Sensor",
-	42:"T5_Sensor",
-	47:"Planning_Bruleur",
-	50:"T2_Limit",
-	51:"T3_Limit",
-	52:"T4_Limit",
-	53:"T5_Limit",
-	58:"Planning _Chaudiere",
-	59:"TD_Retour"
+	38:"",	#T1
+	39:"",	#T2
+	40:"",	#T3
+	58:"",	#Pump modulation 0-100%
 	}
-
-broker_address="192.168.0.101"
-mqtt_clientname="oeg controller"
-
+	
 import minimalmodbus
-import serial 
-import csv
+import serial
 import time
 import paho.mqtt.client as mqtt
+import paho.mqtt.publish as publish
 
-from minimalmodbus import ModbusException
-from minimalmodbus import NoResponseError 
-
-
-
-instrument = minimalmodbus.Instrument('/dev/ttyACM0', 128, minimalmodbus.MODE_ASCII) # port name, slave address (in decimal)
-instrument.serial.baudrate = 9600 # Baud
+instrument = minimalmodbus.Instrument('COM3', 128, minimalmodbus.MODE_ASCII) # port name, slave address (in decimal) 
+#Change the COM port above to the OEG Usb comport or USB address on Linux.
+instrument.serial.baudrate = 9600   # Baud
 instrument.serial.parity = serial.PARITY_EVEN
 instrument.serial.bytesize = 7
 instrument.serial.stopbits = 1
 instrument.serial.timeout = 0.05	# seconds
 
-client = mqtt.Client(mqtt_clientname)
-client.connect(broker_address)
+broker = 'BROKER_IP_ADDRESS'						# Fill in your MQTT broker IP-address
+state_topic = 'home-assistant/oeg/OegT1'
+delay = 5
 
-#localtime=time.asctime(time.localtime(time.time()))
-#file=open('chaudiere.csv', 'a')
-#writer= csv.writer(file)
-for x in oeg_dict:
-	try: 
-		#print ("Register %d" %(x), instrument.read_register (x, 1,3))
-		#print localtime
-		mqtt_topic = "oeg/" + oeg_dict[x]
-		#print mqtt_topic
-		client.publish(mqtt_topic,instrument.read_register(x,1,3,1))
-		#writer.writerow( (x, instrument.read_register (x,0,3),localtime))
-	except NoResponseError:
-		a=1
+# Send messages in a loop
+client = mqtt.Client("ha-client")
+client.username_pw_set("MQTT_USERNAME", "MQTT_PASSWORD") 		# Fill in your MQTT credentials
+client.connect(broker)
+client.loop_start()
 
-#print ("Register %d" %(x), "TimeOut")
-#file.close()
+while True:
+  state_topic = "home-assistant/oeg/OegT1" + oeg_dict[38]
+  client.publish(state_topic, instrument.read_register(38,1,3,signed=True))
+  state_topic = "home-assistant/oeg/OegT2" + oeg_dict[39]
+  client.publish(state_topic, instrument.read_register(39,1,3,signed=True))
+  state_topic = "home-assistant/oeg/OegT3" + oeg_dict[40]
+  client.publish(state_topic, instrument.read_register(40,1,3,signed=True))
+  state_topic = "home-assistant/oeg/Oegpomp" + oeg_dict[58]
+  client.publish(state_topic, instrument.read_register(58,0,3,signed=True))
+  time.sleep(delay)
